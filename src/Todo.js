@@ -1,111 +1,65 @@
-import { Delete } from '@mui/icons-material';
-import EditIcon from '@mui/icons-material/Edit';
-import React,{useState} from 'react'
+import { CheckBox, Delete, Edit } from '@mui/icons-material'
+import React, { useState } from 'react'
+import "./Todo.css"
+import { inputClasses } from '@mui/material'
 
-function Todo() {
- 
-const[input,setInputvalue]=useState("")
-const[tasks,setTask]=useState([])
-const[isEditing,setIsEditing]=useState("false")
+function ToDo() {
+  const [input, setInput] = useState("")
+  const [tasks, setTasks] = useState([])
+  const [edit, setEdit] = useState(0)
+  const [complete, setComplete] = useState([])
 
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (edit !== false) {
+      tasks[edit] = input
+      setEdit(false)
+    } else setTasks([...tasks, input])
+    setInput('')
+  }
 
+  function handleDelete(e, index) {
+    e.preventDefault()
+    setTasks(tasks.filter((task, id) => {
+      return id !== index
+    }))
+  }
 
-function handleDelete(e){
-  e.preventDefault()
-  setTask(tasks.filter(tasks.index)!==false)
-}
+  function handleEdit(e, index) {
+    e.preventDefault()
+    setInput(tasks[index])
+    setEdit(index)
+  }
 
+  function handleCompleted(e, index) {
+    e.preventDefault()
 
-function handlesubmit(e){
-  e.preventDefault();
-
-
-if(isEditing===false){
-  setTask([...tasks,input])
-}
-else{
- tasks[isEditing]=input;
- setTask(tasks);
- setIsEditing(false);
-}
-}
-function handleEdit(e,idToEdit){
-e.preventDefault()
-setInputvalue(tasks[idToEdit])
-setIsEditing(idToEdit)
-}
-
-
-
+  }
 
 
+  return (
+    <div className='wrapper'>
+      <h1>ToDo List</h1>
+      <form onSubmit={handleSubmit} >
+        <input tyep="text" placeholder="Enter Name"
+          value={input}
+          onChange={(e) => setInput(e.target.value)} />
+        <button tyep="Add">Add</button>
 
-    // const movies = [
-    //     {id:1,name:"KDF"},
-    //     {id:2,name:"RRR"},
-    //     {id:3,name:"Harry Potter"},
-    //     {id:4,name:"Singham"},
-    //     {id:5,name:"Bajirao"},
-    //     {id:6,name:"Dhoom"},
-    //   ]
-      
-    //   return(
-        
-
-    //    <ul>{
-      //   movies.map((movie) =>{ 
-      //  return <li key={movie.id}>{movie.name}</li>
-      //   })
-      // movies.map(movie=><li key={movie.id}>{movie.name}</li>)
-      // }
-      //   </ul>
-       
-      //   )
-    
-   return(
-    <>
-    <h1>To Do List</h1>
-    <form onSubmit={handlesubmit}>
-    <input type="text" placeholder="Enter Text" value={input}
-    onChange={(e=>setInputvalue(e.target.value))}/>
-    <button type="Submit">Add</button>
-
-   
-   
-   
-    
-    
-
-   
-   </form>
-
-    <ul>
-
-      {tasks.map((task,index) => {
-        return(
-          <li key={index}>{task}
-          <a href="" onClick={(e)=>handleDelete(e,index)}>
-            <Delete/>
-            </a>
-            <a href="" onChange={(e)=>handleEdit(e,index)}>
-              <EditIcon/>
-            </a>
-           
-            
+      </form>
+      <ul>
+        {tasks.map((task, index) => {
+          return (
+            <li className={complete.includes(index) ? 'complete' : ''} key={index}>{task}
+              <a href='/' onClick={(e) => handleDelete(e, index)}><Delete /></a>
+              <a href='#' onClick={(e) => handleEdit(e, index)}><Edit /></a>
+              <a href='/' onClick={(e) => handleCompleted(e, index)}><CheckBox /></a>
             </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
 
-        )
-      })}
-
-      
-     
-    </ul>
-   
-   
-    </> 
-    
-   )}
-  
-   
-
-export default Todo;
+export default ToDo 
